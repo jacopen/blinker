@@ -1,0 +1,32 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: blinker-job
+spec:
+  completions: 10
+  parallelism: 1
+  backoffLimit: 10
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: blinker
+        image: jacopen/blinker
+        securityContext:
+          privileged: true
+          allowPrivilegeEscalation: true
+        volumeMounts:
+          - mountPath: /sys/class/gpio
+            name: gpio
+          - mountPath: /sys/devices/platform/pinctrl/gpio
+            name: device
+      nodeSelector:
+        kubernetes.io/arch: arm64
+      volumes:
+      - name: gpio
+        hostPath:
+          path: /sys/class/gpio
+      - name: device
+        hostPath:
+          path: /sys/devices/platform/pinctrl/gpio
+

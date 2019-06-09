@@ -1,0 +1,4 @@
+.pyc
+ci/params.yml
+.drone.yml
+.gitlab-ci.yml
